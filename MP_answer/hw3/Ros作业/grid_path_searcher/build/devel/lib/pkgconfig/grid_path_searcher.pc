@@ -1,0 +1,8 @@
+prefix=/home/mch/catkin_ws/src/grid_path_searcher/build/devel
+
+Name: grid_path_searcher
+Description: Description of grid_path_searcher
+Version: 0.0.1
+Cflags: -I/home/mch/catkin_ws/src/grid_path_searcher/include
+Libs: -L${prefix}/lib 
+Requires: 

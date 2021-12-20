@@ -1,0 +1,44 @@
+function Ct = getCt(n_seg, n_order)
+    %#####################################################
+    % STEP 2.1: finish the expression of Ct
+    %
+    %
+    %
+    %
+    %
+    k=n_seg;% number of segments
+    d_order=(n_order+1)/2;
+    % d -------------- []2*d_order*n_seg x 1
+    % [d_F d_p] ------ []d_order*(n_seg+1) x 1
+    Ct=zeros(2*d_order*n_seg,d_order*(n_seg+1));
+    % from 1 to k-th segment, each segment has a start and end point
+    for i=1:k 
+        % first segment
+        if(i==1) 
+            for j=1:d_order
+                Ct(j,j)=1; % start point
+            end
+        end
+        % from 1 to (k-1)-th segment
+        if(i<=k-1)
+            Ct((i-1)*8+1+d_order,i+d_order)=1; % end point's p  = the next piont's p
+            for j=1:3
+                Ct((i-1)*8+1+d_order+j,k+7+(i-1)*3+j)=1; % end point's v a j is free
+            end
+        end
+        % from 2 to k-th segment
+        if(i>=2)
+            Ct((i-1)*8+1,i+3)=1; % start point's p t = the previous point's p
+            for j=1:3
+                Ct((i-1)*8+1+j,k+7+(i-2)*3+j)=1; % start point's v a j  = the pre piont's v a j
+            end
+        end
+        % last seg
+        if(i==k) 
+            for j=1:d_order
+                Ct((i-1)*8+d_order+j,k+3+j)=1; % end point
+            end
+        end
+        
+    end   
+end

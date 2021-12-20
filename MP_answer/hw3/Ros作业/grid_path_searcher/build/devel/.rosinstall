@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/mch/catkin_ws/src/grid_path_searcher/build/devel/setup.sh
