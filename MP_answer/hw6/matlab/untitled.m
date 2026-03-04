@@ -1,21 +1,15 @@
 clc;clear;
 close all
-v_max = 100;
+v_max = 400;
 a_max = 400;
-color = ['r', 'b', 'm', 'g', 'k', 'c', 'r'];
+color = ['r', 'b', 'm', 'g', 'k', 'c', 'c'];
 marker=['+', '<', '*', 'x', '.', 'v', 'square'];
 %% specify the center points of the flight corridor and the region of corridor
 path = [50, 50;
        100, 120;
        180, 150;
        250, 80;
-       280, 0;
-       370, 0;
-       460, 80];
-% path = [50, 50;
-%        120, 50;
-%        190, 50;
-%        260, 50];
+       280, 0];
 % path = [00, 0;
 %        980, 0;
 %        1000,0]; 
@@ -60,17 +54,17 @@ for i = 1:n_seg
     ts(i,1) = 1;
 end
 % ts=[2;50;2]*1;
-% ts=[1;1;1;1;1]*1;
+ts=[1;1;1;1;1]*1;
 % ts=ts*1
 poly_coef_x = MinimumSnapCorridorBezierSolver(1, path(:, 1), corridor, ts, n_seg, n_order, v_max, a_max);
 poly_coef_y = MinimumSnapCorridorBezierSolver(2, path(:, 2), corridor, ts, n_seg, n_order, v_max, a_max);
 
 %% display the trajectory and cooridor
 figure('Name', 'corridor', 'Position', [1200, 100, 800, 800]);
-plot(path(:,1), path(:,2), '*r'); hold on;
-for i = 1:n_seg
-    plot_rect([corridor(1,i);corridor(2,i)], corridor(3, i), corridor(4,i));hold on;
-end
+% plot(path(:,1), path(:,2), '*r'); hold on;
+% for i = 1:n_seg
+%     plot_rect([corridor(1,i);corridor(2,i)], corridor(3, i), corridor(4,i));hold on;
+% end
 hold on;
 %% 计算并绘制X、Y方向的位置、速度、加速度随时间变化曲线
 
@@ -159,15 +153,15 @@ for k = 1:n_seg
         x_jerk(end+1) = jx_current;
         y_jerk(end+1) = jy_current;
     end
-    if(1)
-    f = plot(x_positions((k-1)*200+1:k*200),y_positions((k-1)*200+1:k*200));
-    f.Color = color(k);
-    scatter(ts(k) * poly_coef_x((k-1)*(n_order+1)+1:k*(n_order+1)),...
-    ts(k) * poly_coef_y((k-1)*(n_order+1)+1:k*(n_order+1)),color(k));
-    end
+    % if(1)
+    % f = plot(x_positions((k-1)*200+1:k*200),y_positions((k-1)*200+1:k*200));
+    % f.Color = color(k);
+    % scatter(ts(k) * poly_coef_x((k-1)*(n_order+1)+1:k*(n_order+1)),...
+    % ts(k) * poly_coef_y((k-1)*(n_order+1)+1:k*(n_order+1)),color(k));
+    % end
     
-    % f2=plot(x_velocities, x_accelerations); 
-    % f2.Marker=marker(k);
+    f2=plot(x_velocities, x_accelerations); 
+    f2.Marker=marker(k);
     % 更新累计时间
     total_time_prev = total_time_prev + ts(k);
 end
@@ -209,7 +203,7 @@ plot(x_velocities, x_accelerations, 'g-', 'LineWidth', 1.5);hold on;
 %% 绘制Y方向的位置、速度、加速度随时间变化图
 figure('Name', 'Y方向运动状态', 'Position', [600, 100, 600, 800]);
 
-subplot(5,1,1);
+subplot(3,1,1);
 plot(time_array, y_positions, 'b-', 'LineWidth', 1.5);hold on;
 % plot([ts(1) ts(1)],[-1000 1000],'r-.', 'LineWidth', 1.5');hold on;
 % plot([ts(1)+ts(2) ts(1)+ts(2)],[-1000 1000],'g-', 'LineWidth', 1.5');
@@ -218,7 +212,7 @@ ylabel('Y位置');
 title('Y方向位置 vs 时间');
 grid on;
 
-subplot(5,1,2);
+subplot(3,1,2);
 plot(time_array, y_velocities, 'r-', 'LineWidth', 1.5);hold on;
 % plot([ts(1) ts(1)],[-100 100],'r-.', 'LineWidth', 1.5');hold on;
 % plot([ts(1)+ts(2) ts(1)+ts(2)],[-100 100],'g-', 'LineWidth', 1.5');
@@ -227,7 +221,7 @@ ylabel('Y速度');
 title('Y方向速度 vs 时间');
 grid on;
 
-subplot(5,1,3);
+subplot(3,1,3);
 plot(time_array, y_accelerations, 'g-', 'LineWidth', 1.5);hold on;
 % plot([ts(1) ts(1)],[-100 100],'r-.', 'LineWidth', 1.5');hold on;
 % plot([ts(1)+ts(2) ts(1)+ts(2)],[-100 100],'g-', 'LineWidth', 1.5');
@@ -235,12 +229,9 @@ xlabel('时间 (s)');
 ylabel('Y加速度');
 title('Y方向加速度 vs 时间');
 grid on;
-subplot(5,1,4);
-plot(time_array, y_jerk, 'g-', 'LineWidth', 1.5);hold on;
 
-subplot(5,1,5);
 
-plot(y_velocities, y_accelerations, 'g-', 'LineWidth', 1.5);hold on;
+
 % %% 绘制速度与加速度矢量场（可选）
 % figure('Name', '速度与加速度矢量场', 'Position', [100, 100, 1200, 500]);
 % 
